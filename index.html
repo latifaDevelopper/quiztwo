@@ -1,53 +1,266 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Game</title>
+    <meta name="theme-color" content="#0b1020">
+    <meta name="description" content="Challenge yourself with Quiz Time, a fun general knowledge quiz game.">
+    <title>Quiz Time | General Knowledge</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="screen active" id="start-screen">
-            <h1>Quiz Time!</h1>
-            <p>Test your knowledge with these fun questions</p>
-            <button  id="start-btn">Start Quiz</button>
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <header class="topbar">
+        <a href="#" class="brand" aria-label="Quiz Time home">
+            <span class="brand-icon">Q</span>
+            <span>Quiz<span class="brand-accent">Time</span></span>
+        </a>
+
+        <div class="header-actions">
+            <span class="best-score-badge">
+                <span aria-hidden="true">🏆</span>
+                Best: <strong id="header-best">0/10</strong>
+            </span>
+            <button id="sound-toggle" class="icon-button" type="button"
+                    aria-label="Toggle sound" title="Toggle sound">
+                <span id="sound-icon" aria-hidden="true">🔊</span>
+            </button>
         </div>
-        <div class="screen " id="quiz-screen">
-            <div class="quiz-header">
-                <h2 id="question-text">Question goes here</h2>
+    </header>
+
+    <main class="container">
+
+        <!-- START SCREEN -->
+        <section class="screen active" id="start-screen">
+            <div class="hero-content">
+                <div class="eyebrow">
+                    <span class="status-dot"></span>
+                    YOUR KNOWLEDGE, YOUR CHALLENGE
+                </div>
+
+                <h1>Ready to test<br>your <span class="gradient-text">brain?</span></h1>
+
+                <p class="hero-description">
+                    Challenge yourself with fun general knowledge questions.
+                    Think fast, choose wisely, and beat your best score!
+                </p>
+
+                <div class="feature-pills">
+                    <span>⏱ Timed questions</span>
+                    <span>🧠 General knowledge</span>
+                    <span>🏆 Personal best</span>
+                </div>
+
+                <div class="difficulty-section">
+                    <h2>Choose your difficulty</h2>
+                    <p class="section-subtitle">You can change this before every new game.</p>
+
+                    <div class="difficulty-grid">
+                        <button type="button" class="difficulty-card selected"
+                                data-difficulty="easy" aria-pressed="true">
+                            <span class="difficulty-emoji">🌱</span>
+                            <span class="difficulty-name">Easy</span>
+                            <span class="difficulty-detail">25 seconds / question</span>
+                            <span class="difficulty-check">✓</span>
+                        </button>
+
+                        <button type="button" class="difficulty-card"
+                                data-difficulty="medium" aria-pressed="false">
+                            <span class="difficulty-emoji">⚡</span>
+                            <span class="difficulty-name">Medium</span>
+                            <span class="difficulty-detail">20 seconds / question</span>
+                            <span class="difficulty-check">✓</span>
+                        </button>
+
+                        <button type="button" class="difficulty-card"
+                                data-difficulty="hard" aria-pressed="false">
+                            <span class="difficulty-emoji">🔥</span>
+                            <span class="difficulty-name">Hard</span>
+                            <span class="difficulty-detail">15 seconds / question</span>
+                            <span class="difficulty-check">✓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="primary-btn" type="button">
+                    <span>Start Quiz</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+
+                <p class="start-note">10 questions · One correct answer each · Good luck!</p>
+            </div>
+
+            <aside class="hero-visual" aria-label="Quiz statistics">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+
+                <div class="brain-card">
+                    <span class="brain-spark spark-one">✦</span>
+                    <span class="brain-spark spark-two">✧</span>
+                    <div class="brain-emoji">🧠</div>
+                    <div class="brain-caption">LEVEL UP YOUR MIND</div>
+                </div>
+
+                <div class="floating-card floating-top">
+                    <span class="floating-icon">🎯</span>
+                    <div>
+                        <strong>Stay focused</strong>
+                        <small>Every answer counts</small>
+                    </div>
+                </div>
+
+                <div class="floating-card floating-bottom">
+                    <span class="floating-icon">🏆</span>
+                    <div>
+                        <strong id="visual-best">0 / 10</strong>
+                        <small>Your best score</small>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <!-- QUIZ SCREEN -->
+        <section class="screen quiz-screen" id="quiz-screen">
+            <div class="quiz-top">
+                <button type="button" id="quit-btn" class="text-button">
+                    <span aria-hidden="true">←</span> Exit quiz
+                </button>
+                <span id="active-difficulty" class="level-badge">🌱 EASY</span>
+            </div>
+
+            <div class="quiz-panel">
+                <div class="quiz-heading">
+                    <div>
+                        <span class="eyebrow">GENERAL KNOWLEDGE</span>
+                        <h2>Question <span id="current-question">1</span></h2>
+                    </div>
+
+                    <div class="timer-box" id="timer-box">
+                        <svg class="timer-ring" viewBox="0 0 48 48" aria-hidden="true">
+                            <circle class="timer-track" cx="24" cy="24" r="20"></circle>
+                            <circle id="timer-circle" class="timer-progress"
+                                    cx="24" cy="24" r="20"></circle>
+                        </svg>
+                        <div class="timer-text">
+                            <strong id="timer">25</strong>
+                            <span>SECONDS</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="quiz-info">
-                    <p>
-                        Question <span id="current-question">1</span>of <span id="total-questions">5</span>
-                    </p>
-                    <p>
-                        <span id="score">0</span>
-                    </p>
+                    <span>Question <strong id="question-index">1</strong> of
+                        <strong id="total-questions">10</strong></span>
+                    <span class="score-display">⭐ Score: <strong id="score">0</strong></span>
+                </div>
+
+                <div class="progress-track" role="progressbar"
+                     aria-label="Quiz progress" aria-valuemin="0"
+                     aria-valuemax="10" aria-valuenow="0" id="progress-track">
+                    <div id="progress" class="progress"></div>
+                </div>
+
+                <div class="question-content">
+                    <span class="question-label">YOUR QUESTION</span>
+                    <h3 id="question-text">Question goes here</h3>
+                    <p id="question-hint" class="question-hint"></p>
+                </div>
+
+                <div class="answers-container" id="answers-container"
+                     aria-label="Answer choices"></div>
+
+                <div id="feedback" class="feedback" role="status"
+                     aria-live="polite" hidden></div>
+
+                <div class="quiz-footer">
+                    <span id="answer-status">Select the best answer</span>
+                    <button id="next-btn" class="primary-btn next-btn"
+                            type="button" disabled>
+                        <span>Next Question</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </div>
+            </div>
+            <p class="quiz-disclaimer">Take your time, but watch the clock!</p>
+        </section>
+
+        <!-- RESULT SCREEN -->
+        <section class="screen result-screen" id="result-screen">
+            <div class="result-card">
+                <div id="result-icon" class="result-icon">🏆</div>
+                <span class="eyebrow">QUIZ COMPLETED</span>
+                <h1 id="result-title">Amazing work!</h1>
+                <p id="result-message">Here is how you performed.</p>
+
+                <div class="score-circle" id="score-circle">
+                    <div class="score-circle-inner">
+                        <strong id="percentage">0%</strong>
+                        <span>YOUR SCORE</span>
+                    </div>
+                </div>
+
+                <p class="final-score-line">
+                    You scored <strong id="final-score">0</strong> out of
+                    <strong id="max-score">10</strong>
+                </p>
+
+                <div class="result-stats">
+                    <div class="stat-card">
+                        <span class="stat-icon correct-icon">✓</span>
+                        <strong id="correct-count">0</strong>
+                        <span>Correct</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon wrong-icon">✕</span>
+                        <strong id="wrong-count">0</strong>
+                        <span>Incorrect</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon best-icon">🏆</span>
+                        <strong id="result-best">0/10</strong>
+                        <span>Best score</span>
+                    </div>
+                </div>
+
+                <p id="new-record" class="record-message" hidden>
+                    ✨ New personal best! Keep it up!
+                </p>
+
+                <div class="result-actions">
+                    <button id="restart-btn" class="primary-btn" type="button">
+                        <span>Play Again</span><span aria-hidden="true">↻</span>
+                    </button>
+                    <button id="review-btn" class="secondary-btn" type="button">
+                        Review Answers
+                    </button>
                 </div>
             </div>
 
-<div class="answers-container" id="answers-container">
-    <!-- Answer buttons will be inserted here from our js code later at some point -->
-</div>
-<div class="progress-bar">
-    <div id="progress" class="progress">
+            <div id="review-section" class="review-section" hidden>
+                <div class="review-heading">
+                    <div>
+                        <span class="eyebrow">LEARN FROM YOUR ANSWERS</span>
+                        <h2>Answer Review</h2>
+                    </div>
+                    <button id="close-review-btn" class="text-button" type="button">
+                        Close ✕
+                    </button>
+                </div>
+                <div id="review-list" class="review-list"></div>
+            </div>
+        </section>
 
-    </div>
-</div>
-        </div>
-        <div id="result-screen" class="screen">
-        <h1>Quiz Results</h1>
-        <div class="result-info">
-            <p>You scored <span id="final-score">0</span>out of <span id="max-score">5</span></p>
-            <div id="result-message">Keep studying!you'll get better!</div>
-                    <button id="restart-btn">Restart Quiz</button>
-                    
+        <footer class="site-footer">
+            <p>Made for curious minds <span>✦</span> Keep learning, keep growing.</p>
+        </footer>
+    </main>
 
-        </div>
-        
-    </div>
-    </div>
     <script src="script.js"></script>
-    
 </body>
 </html>
